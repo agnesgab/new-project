@@ -1,0 +1,21 @@
+<h1>Cart</h1>
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.amount }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.price * product.amount }}</td>
+        <td><a href="/remove/{{ product.id }}">Remove</a></td>
+    </tr>
+    {% endfor %}
+    <tr>
+</table>
+<h1>{{ total }} EUR</h1>
+

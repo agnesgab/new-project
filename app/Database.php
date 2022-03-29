@@ -18,9 +18,9 @@ class Database {
         if(self::$connection === null){
 
             $connectionParams = [
-                'dbname' => '',
+                'dbname' => 'products',
                 'user' => 'agnese',
-                'password' => '',
+                'password' => 'kvieklis',
                 'host' => 'localhost',
                 'driver' => 'pdo_mysql',
             ];

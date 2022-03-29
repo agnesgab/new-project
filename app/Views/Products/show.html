@@ -1,0 +1,10 @@
+<div>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p>{{ product.price }}EUR</p>
+    <small>Available: {{ product.amount }}</small>
+    <form method="post" action="/buy/{{ product.id }}">
+        <input type="number" name="amount" min="1" max="{{ product.amount }}">
+        <button type="submit">Add to cart</button>
+    </form>
+</div>

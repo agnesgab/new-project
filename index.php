@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Product;
 use App\Redirect;
+use App\Repositories\Product\MysqlProductRepository;
 use App\View;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -8,11 +10,21 @@ use Twig\Loader\FilesystemLoader;
 require_once 'vendor/autoload.php';
 
 session_start();
+$_SESSION['id'] = 1;
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
 
     $r->addRoute('GET', '/user', ['App\Controllers\UsersController', 'hello']);
     $r->addRoute('POST', '/signup', ['App\Controllers\UsersController', 'saveUser']);
+
+    $r->addRoute('GET', '/products', ['App\Controllers\ProductsController', 'index']);
+    $r->addRoute('GET', '/add', ['App\Controllers\ProductsController', 'addProduct']);
+    $r->addRoute('POST', '/saved', ['App\Controllers\ProductsController', 'storeProduct']);
+    $r->addRoute('GET', '/show/{id:\d+}', ['App\Controllers\ProductsController', 'show']);
+    $r->addRoute('POST', '/buy/{id:\d+}', ['App\Controllers\CartController', 'addToCart']);
+    $r->addRoute('GET', '/cart', ['App\Controllers\CartController', 'showCart']);
+    $r->addRoute('GET', '/remove/{id:\d+}', ['App\Controllers\CartController', 'removeFromCart']);
+
 
 
     $r->addRoute('GET', '/select', ['App\Controllers\UsersController', 'select']);
