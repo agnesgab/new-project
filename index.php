@@ -12,6 +12,8 @@ session_start();
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
 
     $r->addRoute('GET', '/user', ['App\Controllers\UsersController', 'hello']);
+    $r->addRoute('POST', '/signup', ['App\Controllers\UsersController', 'saveUser']);
+
 
     $r->addRoute('GET', '/select', ['App\Controllers\UsersController', 'select']);
 

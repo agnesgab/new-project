@@ -1,24 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Services\User\Save;
 
-class User {
+class UserSaveRequest {
 
     private string $name;
     private string $surname;
 
     public function __construct(string $name, string $surname)
     {
+
         $this->name = $name;
         $this->surname = $surname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**
@@ -27,5 +20,13 @@ class User {
     public function getSurname(): string
     {
         return $this->surname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }
