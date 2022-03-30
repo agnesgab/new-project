@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Database;
-use App\Models\Product;
 use App\Redirect;
 use App\Services\Cart\Add\CartAddRequest;
 use App\Services\Cart\Add\CartAddService;
@@ -12,8 +10,16 @@ use App\Services\Cart\Remove\CartRemoveService;
 use App\Services\Cart\Show\CartShowRequest;
 use App\Services\Cart\Show\CartShowService;
 use App\View;
+use Psr\Container\ContainerInterface;
 
 class CartController {
+
+    private ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function addToCart(array $vars):Redirect
     {
@@ -22,7 +28,7 @@ class CartController {
         $amount = $_POST['amount'];
 
         $request = new CartAddRequest($productId, $userId, $amount);
-        $service = new CartAddService();
+        $service = $this->container->get(CartAddService::class);
         $service->execute($request);
 
         return new Redirect('/products');
@@ -33,7 +39,7 @@ class CartController {
     {
         $userId = $_SESSION['id'];
         $request = new CartShowRequest($userId);
-        $service = new CartShowService();
+        $service = $this->container->get(CartShowService::class);
         $response = $service->execute($request);
 
         return new View('Cart/cart.html', ['products' => $response->getProducts(), 'total' => $response->getTotalSum()]);
@@ -43,7 +49,7 @@ class CartController {
     {
         $itemId = (int)$vars['id'];
         $request = new CartRemoveRequest($itemId);
-        $service = new CartRemoveService();
+        $service = $this->container->get(CartRemoveService::class);
         $service->execute($request);
 
         return new Redirect('/cart');

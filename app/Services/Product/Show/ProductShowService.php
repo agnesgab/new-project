@@ -3,17 +3,17 @@
 namespace App\Services\Product\Show;
 
 use App\Models\Product;
-use App\Repositories\Product\MysqlProductRepository;
 use App\Repositories\Product\ProductRepository;
 
 class ProductShowService {
 
     private ProductRepository $productRepository;
 
-    public function __construct(){
+    public function __construct(ProductRepository $productRepository){
 
-        $this->productRepository = new MysqlProductRepository();
+        $this->productRepository = $productRepository;
     }
+
     public function execute(ProductShowRequest $request): ProductShowResponse
     {
         $productQuery = $this->productRepository->show($request->getProductId());

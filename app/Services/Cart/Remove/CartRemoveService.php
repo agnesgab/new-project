@@ -3,21 +3,18 @@
 namespace App\Services\Cart\Remove;
 
 use App\Repositories\Cart\CartRepository;
-use App\Repositories\Cart\MysqlCartRepository;
 
 class CartRemoveService {
 
     private CartRepository $cartRepository;
 
-    public function __construct()
+    public function __construct(CartRepository $cartRepository)
     {
-        $this->cartRepository = new MysqlCartRepository();
+        $this->cartRepository = $cartRepository;
     }
 
-
-    public function execute(CartRemoveRequest $request){
-
+    public function execute(CartRemoveRequest $request)
+    {
         $this->cartRepository->remove($request->getItemId());
-
     }
 }

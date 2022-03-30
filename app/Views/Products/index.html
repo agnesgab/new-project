@@ -1,6 +1,8 @@
+<form method="get" action="/cart"><button type="submit">Show my cart</button></form>
 <h1>Products</h1>
+<div style="display: flex">
 {% for product in products %}
-<div>
+<div style="border: 1px solid blue; width: 300px">
     <a href="/show/{{ product.id }}">{{ product.name }}</a>
     <ul>
         <li>Price: {{ product.price }}</li>
@@ -8,10 +10,9 @@
         <li>Description: {{ product.description }}</li>
     </ul>
     <form method="post" action="/buy/{{ product.id }}">
-        <input type="number" name="amount" min="1" max="{{ product.amount }}">
+        <input type="number" name="amount" min="1" max="{{ product.amount }}" placeholder="1">
         <button type="submit">Add to cart</button>
     </form>
 </div>
-
 {% endfor %}
-<form method="get" action="/cart"><button type="submit">Show my cart</button></form>
+</div>

@@ -14,9 +14,7 @@ class Database {
      */
     public static function connection()
     {
-
         if(self::$connection === null){
-
             $connectionParams = [
                 'dbname' => 'products',
                 'user' => 'agnese',

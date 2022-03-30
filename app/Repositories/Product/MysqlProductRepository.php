@@ -29,4 +29,15 @@ class MysqlProductRepository implements ProductRepository {
             ->executeQuery()
             ->fetchAssociative();
     }
+
+    public function index(): array
+    {
+        return Database::connection()
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('products')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+    }
 }

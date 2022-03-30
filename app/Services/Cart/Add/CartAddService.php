@@ -3,20 +3,19 @@
 namespace App\Services\Cart\Add;
 
 use App\Repositories\Cart\CartRepository;
-use App\Repositories\Cart\MysqlCartRepository;
 
 class CartAddService {
 
     private CartRepository $cartRepository;
 
-    public function __construct()
+    public function __construct(CartRepository $cartRepository)
     {
-        $this->cartRepository = new MysqlCartRepository();
+        $this->cartRepository = $cartRepository;
     }
 
-    public function execute(CartAddRequest $request){
 
+    public function execute(CartAddRequest $request)
+    {
         $this->cartRepository->add($request->getUserId(), $request->getProductId(), $request->getAmount());
-
     }
 }

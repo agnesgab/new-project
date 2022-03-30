@@ -10,7 +10,6 @@ class CartAddRequest {
 
     public function __construct(int $productId, int $userId, int $amount)
     {
-
         $this->productId = $productId;
         $this->userId = $userId;
         $this->amount = $amount;

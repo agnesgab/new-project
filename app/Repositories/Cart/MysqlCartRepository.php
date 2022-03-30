@@ -3,7 +3,6 @@
 namespace App\Repositories\Cart;
 
 use App\Database;
-use App\Models\Product;
 
 class MysqlCartRepository implements CartRepository {
 

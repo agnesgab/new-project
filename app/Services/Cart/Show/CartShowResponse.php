@@ -4,7 +4,6 @@ namespace App\Services\Cart\Show;
 
 class CartShowResponse
 {
-
     private array $products;
     private int $totalSum;
 

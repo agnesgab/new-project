@@ -2,18 +2,16 @@
 
 namespace App\Services\Cart\Show;
 
-use App\Database;
 use App\Models\Product;
 use App\Repositories\Cart\CartRepository;
-use App\Repositories\Cart\MysqlCartRepository;
 
 class CartShowService {
 
     private CartRepository $cartRepository;
 
-    public function __construct()
+    public function __construct(CartRepository $cartRepository)
     {
-        $this->cartRepository = new MysqlCartRepository();
+        $this->cartRepository = $cartRepository;
     }
 
     public function execute(CartShowRequest $request): CartShowResponse

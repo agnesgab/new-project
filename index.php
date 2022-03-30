@@ -1,9 +1,12 @@
 <?php
 
-use App\Models\Product;
 use App\Redirect;
+use App\Repositories\Cart\CartRepository;
+use App\Repositories\Cart\MysqlCartRepository;
 use App\Repositories\Product\MysqlProductRepository;
+use App\Repositories\Product\ProductRepository;
 use App\View;
+use FastRoute\Dispatcher;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -14,9 +17,6 @@ $_SESSION['id'] = 1;
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
 
-    $r->addRoute('GET', '/user', ['App\Controllers\UsersController', 'hello']);
-    $r->addRoute('POST', '/signup', ['App\Controllers\UsersController', 'saveUser']);
-
     $r->addRoute('GET', '/products', ['App\Controllers\ProductsController', 'index']);
     $r->addRoute('GET', '/add', ['App\Controllers\ProductsController', 'addProduct']);
     $r->addRoute('POST', '/saved', ['App\Controllers\ProductsController', 'storeProduct']);
@@ -25,38 +25,25 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/cart', ['App\Controllers\CartController', 'showCart']);
     $r->addRoute('GET', '/remove/{id:\d+}', ['App\Controllers\CartController', 'removeFromCart']);
 
-
-
-    $r->addRoute('GET', '/select', ['App\Controllers\UsersController', 'select']);
-
-    //nothing going on
-    $r->addRoute('GET', '/users', ['App\Controllers\UsersController', 'index']);
-    $r->addRoute('GET', '/users/id', ['App\Controllers\UsersController', 'show']);
-
-    //reservation
-    $r->addRoute('GET', '/dates', ['App\Controllers\ApartmentsController', 'dates']);
-    $r->addRoute('POST', '/dates/search', ['App\Controllers\ApartmentsController', 'showAvailable']);
-    $r->addRoute('GET', '/book/{id:\d+}', ['App\Controllers\ReservationsController', 'doReservation']);
-    $r->addRoute('POST', '/validation/{id:\d+}', ['App\Controllers\ReservationsController', 'validateReservation']);
-
-    //reservation results
-    $r->addRoute('GET', '/reservations', ['App\Controllers\ReservationsController', 'index']);
-    $r->addRoute('GET', '/reservation', ['App\Controllers\ReservationsController', 'show']);
-    $r->addRoute('GET', '/cancel/{id:\d+}', ['App\Controllers\ReservationsController', 'cancel']);
-
-
 });
 
 // Fetch method and URI from somewhere
 /**
- * @param \FastRoute\Dispatcher $dispatcher
+ * @param Dispatcher $dispatcher
  * @return void
  * @throws \Twig\Error\LoaderError
  * @throws \Twig\Error\RuntimeError
  * @throws \Twig\Error\SyntaxError
  */
-function fetchMethodAndURIFromSomewhere(\FastRoute\Dispatcher $dispatcher): void
+function fetchMethodAndURIFromSomewhere(Dispatcher $dispatcher): void
 {
+    $builder = new DI\ContainerBuilder();
+    $builder->addDefinitions([
+        ProductRepository::class => DI\create(MysqlProductRepository::class),
+        CartRepository::class => DI\create(MysqlCartRepository::class)
+    ]);
+    $container = $builder->build();
+
     $httpMethod = $_SERVER['REQUEST_METHOD'];
     $uri = $_SERVER['REQUEST_URI'];
 
@@ -86,7 +73,7 @@ function fetchMethodAndURIFromSomewhere(\FastRoute\Dispatcher $dispatcher): void
 
 
             /** @var View $response */
-            $response = (new $controller)->$method($vars);
+            $response = (new $controller($container))->$method($vars);
 
             $loader = new FilesystemLoader('app/Views');
             $twig = new Environment($loader);
